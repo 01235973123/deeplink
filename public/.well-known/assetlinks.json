@@ -1,0 +1,14 @@
+[
+  {
+    "relation": ["delegate_permission/common.handle_all_urls"],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "com.unitel.logistics",
+      "sha256_cert_fingerprints": [
+        "FA:C6:17:45:DC:09:03:78:6F:B9:ED:E6:2A:96:2B:39:9F:73:48:F0:BB:6F:89:9B:83:32:66:75:91:03:3B:9C",
+        "1F:98:D0:CF:15:C0:4C:01:81:77:B5:4A:D7:A8:36:6E:46:BB:8D:74:57:DB:68:81:67:CE:75:DD:DD:F6:BD:84",
+        "CB:DD:28:13:CD:D8:47:1A:CD:66:89:AD:3C:3E:77:AB:8B:86:C8:F4:02:49:4C:F2:86:46:17:08:64:CB:9C:7D"
+      ]
+    }
+  }
+]
