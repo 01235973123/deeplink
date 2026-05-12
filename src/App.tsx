@@ -32,7 +32,7 @@ function getDeepLink(path: string) {
 function App() {
   const mobile = isIOS() || isAndroid();
   const ios = isIOS();
-  const storeUrl = ios ? IOS_STORE : ANDROID_STORE;
+  // const storeUrl = ios ? IOS_STORE : ANDROID_STORE;
   const path = getPath();
   const deepLink = getDeepLink(path);
 
