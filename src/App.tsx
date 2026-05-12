@@ -1,3 +1,5 @@
+import { useEffect } from 'react';
+
 const ANDROID_STORE = 'https://play.google.com/store/apps/details?id=com.unitel.logistics';
 const IOS_STORE = 'https://apps.apple.com/sg/app/unitel-logistic/id6751838785';
 const APP_SCHEME = 'unitellogistics://';
@@ -34,13 +36,20 @@ function App() {
   const path = getPath();
   const deepLink = getDeepLink(path);
 
+  // iOS: auto-open app via custom scheme (no popup issue on iOS)
+  useEffect(() => {
+    if (!ios) return;
+    window.location.href = `${APP_SCHEME}ushop${path ? `?path=${encodeURIComponent(path)}` : ''}`;
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   if (mobile) {
     return (
       <div style={s.container}>
         <div style={s.card}>
           <div style={s.logo}><span style={s.logoText}>U</span></div>
           <h2 style={s.title}>Unitel Logistics</h2>
-          <p style={s.sub}>Nhấn để mở trong ứng dụng</p>
+          <p style={s.sub}>{ios ? 'Đang mở ứng dụng…' : 'Nhấn để mở trong ứng dụng'}</p>
           <div style={s.row}>
             <a href={deepLink} style={{ ...s.btn, background: BRAND }}>Mở ứng dụng</a>
             <a href={storeUrl} style={s.btn}>Tải về</a>
