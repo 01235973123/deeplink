@@ -1,5 +1,3 @@
-import { useEffect } from 'react';
-
 const ANDROID_STORE = 'https://play.google.com/store/apps/details?id=com.unitel.logistics';
 const IOS_STORE = 'https://apps.apple.com/sg/app/unitel-logistic/id6751838785';
 const APP_SCHEME = 'unitellogistics://';
@@ -20,14 +18,13 @@ function getPath() {
   return params.get('path') ?? '';
 }
 
-function openDeepLink(storeUrl: string, path: string) {
+function getDeepLink(path: string) {
   const query = path ? `?path=${encodeURIComponent(path)}` : '';
   if (isAndroid()) {
-    const fallback = encodeURIComponent(storeUrl);
-    window.location.href = `intent://ushop${query}#Intent;scheme=unitellogistics;package=${APP_PACKAGE};S.browser_fallback_url=${fallback};end`;
-  } else {
-    window.location.href = `${APP_SCHEME}ushop${query}`;
+    const fallback = encodeURIComponent(ANDROID_STORE);
+    return `intent://ushop${query}#Intent;scheme=unitellogistics;package=${APP_PACKAGE};S.browser_fallback_url=${fallback};end`;
   }
+  return `${APP_SCHEME}ushop${query}`;
 }
 
 function App() {
@@ -35,12 +32,7 @@ function App() {
   const ios = isIOS();
   const storeUrl = ios ? IOS_STORE : ANDROID_STORE;
   const path = getPath();
-
-  useEffect(() => {
-    if (!mobile) return;
-    openDeepLink(storeUrl, path);
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  const deepLink = getDeepLink(path);
 
   if (mobile) {
     return (
@@ -48,8 +40,11 @@ function App() {
         <div style={s.card}>
           <div style={s.logo}><span style={s.logoText}>U</span></div>
           <h2 style={s.title}>Unitel Logistics</h2>
-          <p style={s.sub}>Đang mở ứng dụng…</p>
-          <div style={s.spinner} />
+          <p style={s.sub}>Nhấn để mở trong ứng dụng</p>
+          <div style={s.row}>
+            <a href={deepLink} style={{ ...s.btn, background: BRAND }}>Mở ứng dụng</a>
+            <a href={storeUrl} style={s.btn}>Tải về</a>
+          </div>
         </div>
       </div>
     );
@@ -88,11 +83,6 @@ const s: Record<string, React.CSSProperties> = {
   logoText: { color: '#fff', fontSize: 36, fontWeight: 700, fontFamily: 'sans-serif' },
   title: { margin: '0 0 8px', fontSize: 22, fontWeight: 700, color: '#111', fontFamily: 'sans-serif' },
   sub: { margin: '0 0 24px', fontSize: 14, color: '#666', lineHeight: 1.5, fontFamily: 'sans-serif' },
-  spinner: {
-    width: 32, height: 32, border: '3px solid #eee',
-    borderTop: `3px solid ${BRAND}`, borderRadius: '50%',
-    margin: '0 auto', animation: 'spin 0.8s linear infinite',
-  },
   row: { display: 'flex', gap: 12, justifyContent: 'center' },
   btn: {
     padding: '12px 20px', background: '#111', color: '#fff',
