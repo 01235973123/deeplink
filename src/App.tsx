@@ -49,11 +49,10 @@ function App() {
         <div style={s.card}>
           <div style={s.logo}><span style={s.logoText}>U</span></div>
           <h2 style={s.title}>Unitel Logistics</h2>
-          <p style={s.sub}>{ios ? 'Đang mở ứng dụng…' : 'Nhấn để mở trong ứng dụng'}</p>
-          <div style={s.row}>
+          <p style={s.sub}>Đang mở ứng dụng…</p>
+          {!ios && (
             <a href={deepLink} style={{ ...s.btn, background: BRAND }}>Mở ứng dụng</a>
-            <a href={storeUrl} style={s.btn}>Tải về</a>
-          </div>
+          )}
         </div>
       </div>
     );
