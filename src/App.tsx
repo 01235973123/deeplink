@@ -3,6 +3,7 @@ import { useEffect } from 'react';
 const ANDROID_STORE = 'https://play.google.com/store/apps/details?id=com.unitel.logistics';
 const IOS_STORE = 'https://apps.apple.com/sg/app/unitel-logistic/id6751838785';
 const APP_SCHEME = 'unitellogistics://';
+const APP_PACKAGE = 'com.unitel.logistics';
 const BRAND = '#E03C2D';
 
 function isIOS() {
@@ -19,17 +20,14 @@ function getPath() {
   return params.get('path') ?? '';
 }
 
-// Try to open app via custom scheme.
-// If app is installed the OS switches to it immediately.
-// If not installed, the timeout fires and redirects to store.
-function tryOpenAppOrGoToStore(storeUrl: string, deepLink: string) {
-  const start = Date.now();
-  window.location.href = deepLink;
-  setTimeout(() => {
-    if (Date.now() - start < 2500) {
-      window.location.replace(storeUrl);
-    }
-  }, 1500);
+function openDeepLink(storeUrl: string, path: string) {
+  const query = path ? `?path=${encodeURIComponent(path)}` : '';
+  if (isAndroid()) {
+    const fallback = encodeURIComponent(storeUrl);
+    window.location.href = `intent://ushop${query}#Intent;scheme=unitellogistics;package=${APP_PACKAGE};S.browser_fallback_url=${fallback};end`;
+  } else {
+    window.location.href = `${APP_SCHEME}ushop${query}`;
+  }
 }
 
 function App() {
@@ -40,10 +38,7 @@ function App() {
 
   useEffect(() => {
     if (!mobile) return;
-    const deepLink = path
-      ? `${APP_SCHEME}ushop?path=${encodeURIComponent(path)}`
-      : `${APP_SCHEME}ushop`;
-    tryOpenAppOrGoToStore(storeUrl, deepLink);
+    openDeepLink(storeUrl, path);
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
