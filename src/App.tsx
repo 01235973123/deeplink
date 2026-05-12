@@ -36,10 +36,14 @@ function App() {
   const path = getPath();
   const deepLink = getDeepLink(path);
 
-  // iOS: auto-open app via custom scheme (no popup issue on iOS)
+  // iOS: auto-open app, fallback to App Store after 1.5s if app not installed
   useEffect(() => {
     if (!ios) return;
+    const timer = setTimeout(() => {
+      window.location.replace(IOS_STORE);
+    }, 1500);
     window.location.href = `${APP_SCHEME}ushop${path ? `?path=${encodeURIComponent(path)}` : ''}`;
+    return () => clearTimeout(timer);
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
